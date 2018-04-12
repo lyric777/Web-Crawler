@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
+import urllib.request
+from bs4 import BeautifulSoup
+
+
+request = urllib.request.Request('https://movie.douban.com/top250')
+try:
+    response = urllib.request.urlopen(request)
+    html = response.read()
+except urllib.request.HTTPError as e:
+    print(e.reason)
+
+soup = BeautifulSoup(html)
+movieinfo = []
+for movie in soup.find_all('div', attrs={'class': 'info'}):
+    eachmovie = []
+    findhd = movie.find('div', attrs={'class': 'hd'})
+    moviename = findhd.find('span', attrs={'class': 'title'}).string
+    eachmovie.append(moviename)
+
+    findbd = movie.find('div', attrs={'class': 'bd'})
+    movieactor = findbd.find('p', attrs={'class': ''}).contents[0]
+    movieactor = movieactor.replace(' ', '')
+    movieactor = movieactor.replace('\n', '')
+    movieactor = movieactor.replace('\xa0\xa0\xa0', ' ')
+    movieactor = movieactor.replace('/...', '')
+    movieactor = movieactor.replace('...', '')
+    eachmovie.append(movieactor)
+
+    findstar = findbd.find('div', attrs={'class': 'star'})
+    moviestar = findstar.find('span', attrs={'rating_num'}).string
+    eachmovie.append(moviestar)
+
+    moviequote = findbd.find('span', attrs={'class': 'inq'}).string
+    eachmovie.append(moviequote)
+
+    movieinfo.append(eachmovie)
+
+print(movieinfo)
+
+
+with open('F:\py\output.txt', 'w', encoding='gbk', errors='ignore') as f:
+    f.write(str(movieinfo))
+f.close()
