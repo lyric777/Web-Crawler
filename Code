@@ -2,16 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
-import urllib.request
+import requests
 from bs4 import BeautifulSoup
+import json
 
-
-request = urllib.request.Request('https://movie.douban.com/top250')
-try:
-    response = urllib.request.urlopen(request)
-    html = response.read()
-except urllib.request.HTTPError as e:
-    print(e.reason)
+response = requests.get('https://movie.douban.com/top250', auth=('user', 'pass'))
+html = response.text
 
 soup = BeautifulSoup(html)
 movieinfo = []
@@ -39,9 +35,7 @@ for movie in soup.find_all('div', attrs={'class': 'info'}):
 
     movieinfo.append(eachmovie)
 
-print(movieinfo)
 
-
-with open('F:\py\output.txt', 'w', encoding='gbk', errors='ignore') as f:
-    f.write(str(movieinfo))
+with open('F:\py\output.js', 'w', errors='ignore') as f:
+    f.write(json.dumps(movieinfo))
 f.close()
