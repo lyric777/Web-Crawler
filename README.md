@@ -10,5 +10,5 @@ without modular programming.
 
 “手机”搜索结果列表里各种评论相关的统计数据
 
-https://blog.csdn.net/six66667/article/details/93487869
+一些解释说明：https://blog.csdn.net/six66667/article/details/93487869
 
